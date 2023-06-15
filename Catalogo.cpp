@@ -1,0 +1,242 @@
+#include "Catalogo.h"
+
+Catalogo::Catalogo()
+{
+    
+}
+
+void Catalogo::CargaVideos() {
+
+    const int iTotalVideos = 66;
+    int iTotalVideos_Contador = 0;
+    struct datos_video aVideo[iTotalVideos];
+    int ivideo = 0;
+
+    vector<Episodio> vEpisodios;
+
+    string sIDSerie_Corte = "";    
+    string sNombreSerie_Corte = "";
+    string sGeneroSerie_Corte = "";
+    
+    string array_id;
+    string array_nombre;
+    string array_duracion;
+    string array_genero;
+    string array_calificacion;
+    string array_fecha_estreno;
+
+    string array_id_episodio;
+    string array_nombre_episodio;
+    string array_numero_temporada;
+    string array_numero_episodio;
+
+    if ( vPeliculas.size() > 0 )
+        vPeliculas.clear();
+    if ( vSeries.size() > 0 )
+        vSeries.clear();
+
+    ifstream oArchivo;
+    oArchivo.open("BasePeliculas.csv");
+
+    string sLinea;
+    getline(oArchivo, sLinea);
+    while (getline(oArchivo, sLinea))
+    {
+        stringstream cadena_stream(sLinea); 
+        
+        getline(cadena_stream, array_id, ',');
+        getline(cadena_stream, array_nombre, ',');
+        getline(cadena_stream, array_duracion, ',');
+        getline(cadena_stream, array_genero, ',');
+        getline(cadena_stream, array_calificacion, ',');
+        getline(cadena_stream, array_fecha_estreno, ',');
+        
+        getline(cadena_stream, array_id_episodio, ',');
+        getline(cadena_stream, array_nombre_episodio, ',');
+        getline(cadena_stream, array_numero_temporada, ',');
+        getline(cadena_stream, array_numero_episodio, ',');
+        
+        aVideo[ivideo].id = array_id;
+        aVideo[ivideo].nombre = array_nombre;
+        aVideo[ivideo].duracion = array_duracion;
+        aVideo[ivideo].genero = array_genero;
+        aVideo[ivideo].calificacion = array_calificacion;
+        aVideo[ivideo].fecha_estreno = array_fecha_estreno;
+        aVideo[ivideo].episodio_id = array_id_episodio;
+        aVideo[ivideo].episodio_nombre = array_nombre_episodio;
+        aVideo[ivideo].episodio_temporada = array_numero_temporada;
+        aVideo[ivideo].episodio_num_episodio = array_numero_episodio;
+        ivideo += 1;
+    }
+    oArchivo.close();
+
+    Ordenar_por_NombreArreglo(aVideo, iTotalVideos);
+
+    for (size_t i = 0; i < iTotalVideos; i++)
+    {
+        if ( aVideo[i].episodio_id == "" )
+        {
+            Pelicula oPelicula(aVideo[i].id, aVideo[i].nombre, stoi(aVideo[i].duracion), stof(aVideo[i].calificacion), aVideo[i].fecha_estreno, aVideo[i].genero);
+            vPeliculas.push_back(oPelicula);
+        }
+        else
+        {
+            if ( sNombreSerie_Corte == aVideo[i].nombre || sNombreSerie_Corte == "" )
+            {
+                Episodio oEpisodio(aVideo[i].episodio_id, aVideo[i].episodio_nombre, stoi(aVideo[i].duracion), stof(aVideo[i].calificacion), aVideo[i].fecha_estreno, stoi(aVideo[i].episodio_num_episodio), stoi(aVideo[i].episodio_temporada));
+                vEpisodios.push_back(oEpisodio);
+                
+                sIDSerie_Corte = aVideo[i].id;
+                sNombreSerie_Corte = aVideo[i].nombre;
+                sGeneroSerie_Corte = aVideo[i].genero;
+            }
+            else
+            {
+                Serie oSerie(vEpisodios, sIDSerie_Corte, sNombreSerie_Corte, sGeneroSerie_Corte);
+                vSeries.push_back(oSerie);
+                vEpisodios.clear();
+
+                Episodio oEpisodio(aVideo[i].episodio_id, aVideo[i].episodio_nombre, stoi(aVideo[i].duracion), stof(aVideo[i].calificacion), aVideo[i].fecha_estreno, stoi(aVideo[i].episodio_num_episodio), stoi(aVideo[i].episodio_temporada));
+                vEpisodios.push_back(oEpisodio);
+
+                sIDSerie_Corte = aVideo[i].id;
+                sNombreSerie_Corte = aVideo[i].nombre;
+                sGeneroSerie_Corte = aVideo[i].genero;
+
+                if ( ( i + 1 ) == iTotalVideos )
+                {
+                    Serie oSerie(vEpisodios, sIDSerie_Corte, sNombreSerie_Corte, sGeneroSerie_Corte);
+                    vSeries.push_back(oSerie);
+                }
+            }
+        }
+    }
+
+    system("clear");
+    cout << "Catalogo cargado exitosamente" << endl;
+}
+
+void Catalogo::VideosporCalificacion() {
+    float iCalificacion = 0.0;
+    cout << "Captura la calificación: ";
+    cin >> iCalificacion;
+    cin.clear();            //LIMPIA EL INDICADOR DE ERROR, SI TECLEA UN VALOR DIFERENTE A NUMERO
+    cin.ignore(1000,'\n');  //BORRA UNO O MAS CARACTERES DEL BUFFER, \N ES EL DELIMITADOR O CARACTER FINAL DE ENTRADA
+    for(int i=0; i<vSeries.size(); i++)
+    {
+        vSeries[i].VideosporCalificacion(iCalificacion);
+    }
+    for(int i=0; i<vPeliculas.size(); i++)
+    {
+        vPeliculas[i].VideosporCalificacion(iCalificacion);
+    }
+}
+
+
+void Catalogo::VideosporGenero() {
+    string sGenero = "";
+    cout << "Captura el genero del video: ";
+    getline(cin,sGenero);
+    for(int i=0; i<vSeries.size(); i++)
+    {
+        if ( vSeries[i].SerieGenero().find(sGenero) != std::string::npos )  //si hemos llegado al final de nuestra cadena.
+        {
+            vSeries[i].VideosporGenero(sGenero);
+        }
+    }
+    for(int i=0; i<vPeliculas.size(); i++)
+    {
+        if ( vPeliculas[i].PeliculaGenero().find(sGenero) != std::string::npos )  //si hemos llegado al final de nuestra cadena.
+        {
+            vPeliculas[i].VideosporGenero(sGenero);
+        }
+    }
+}
+
+void Catalogo::EpisodiosPorSerie() 
+{
+    string sNombre = "";
+    cout << "Captura el nombre de la serie: ";
+    getline(cin,sNombre);
+    for(int i=0; i<vSeries.size(); i++)
+    {
+        if ( vSeries[i].SerieNombre() == sNombre )
+        {
+            vSeries[i].EpisodiosPorSerie(sNombre);
+        }
+    }
+}
+
+void Catalogo::PeliculasporCalificacion() {
+    float iCalificacion = 0.0;
+    cout << "Captura la calificación: ";
+    cin >> iCalificacion;
+    cin.clear();            //LIMPIA EL INDICADOR DE ERROR, SI TECLEA UN VALOR DIFERENTE A NUMERO
+    cin.ignore(1000,'\n');  //BORRA UNO O MAS CARACTERES DEL BUFFER, \N ES EL DELIMITADOR O CARACTER FINAL DE ENTRADA
+    for(int i=0; i<vPeliculas.size(); i++)
+    {
+        vPeliculas[i].PeliculasporCalificacion(iCalificacion);
+    }
+}
+
+void Catalogo::CalificarVideo() {
+    bool bExisteVideo = false;
+    float iCalificacion = 0.0;
+
+    string sNombre = "";
+    cout << "Captura el nombre del video: ";
+    getline(cin,sNombre);
+    
+    for(int i=0; i<vPeliculas.size(); i++)
+    {
+        if ( vPeliculas[i].PeliculaNombre() == sNombre )
+            bExisteVideo = true;
+    }
+
+    for(int i=0; i<vSeries.size(); i++)
+    {
+        if ( vSeries[i].EpisodioNombre(sNombre) == sNombre )
+            bExisteVideo = true;
+    }
+
+    if ( bExisteVideo )
+    {
+        try
+        {
+            cout << "Captura la calificación para el video " << sNombre << ": " << endl;
+            cin >> iCalificacion;
+            cin.clear();            //LIMPIA EL INDICADOR DE ERROR, SI TECLEA UN VALOR DIFERENTE A NUMERO
+            cin.ignore(1000,'\n');  //BORRA UNO O MAS CARACTERES DEL BUFFER, \N ES EL DELIMITADOR O CARACTER FINAL DE ENTRADA
+            if (iCalificacion == 0)
+            {
+                system("clear");
+                throw std::runtime_error("Error, captura una calificación correcta.");
+            }
+            system("clear");
+            cout << "Calificación guardada." << endl;
+        }
+        catch (const exception& p_error)
+        {
+            system("clear");
+            cout << p_error.what() << "\n";
+        }   
+    }
+    else
+        cout << "El nombre del video no existe." << endl;
+}
+
+void Catalogo::Ordenar_por_NombreArreglo(datos_video *lista, int numElementos)
+{ 
+    for (int i = 0; i < numElementos-1; i++)     
+    {  
+        for (int j = 0; j < numElementos-i-1; j++)
+        {
+            if (lista[j].nombre > lista[j+1].nombre) 
+            {
+                datos_video temp = lista[j];
+                lista[j] = lista[j+1];
+                lista[j+1] = temp;
+            }
+        }
+    }
+} 
