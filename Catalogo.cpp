@@ -130,11 +130,8 @@ void Catalogo::VerTodo() {
 
     cout << "⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆ SERIES ⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆" << endl << endl;
     for (const Serie& serie : vSeries) {
-        cout << "Nombre: " << serie.nombre << endl;
-        cout << "ID: " << serie.id << endl;
+        cout << "Nombre: " << serie.serie_nombre << endl;
         cout << "Género: " << serie.serie_genero << endl;
-        cout << "Episodios: " << endl;
-
         cout << endl;
     }
 }
