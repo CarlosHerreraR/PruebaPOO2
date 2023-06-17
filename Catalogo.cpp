@@ -113,15 +113,43 @@ void Catalogo::CargaVideos() {
     }
 
     system("clear");
-    cout << "Catalogo cargado exitosamente" << endl;
+    cout << endl <<"Catalogo cargado exitosamente" << endl;
 }
+
+void Catalogo::VerTodo() {
+    
+    cout << "⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆ PELICULAS ⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆" << endl;
+    for (const Pelicula& pelicula : vPeliculas) {
+        cout << "Nombre: " << pelicula.nombre << endl;
+        cout << "ID: " << pelicula.id << endl;
+        cout << "Género: " << pelicula.pelicula_genero<< endl;
+        cout << "Calificación: " << pelicula.calificacion<< endl;
+        cout << "Duración: " << pelicula.duracion << " minutos" << endl;
+        cout << endl;
+    }
+
+    cout << "⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆ SERIES ⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆" << endl << endl;
+    for (const Serie& serie : vSeries) {
+        cout << "Nombre: " << serie.nombre << endl;
+        cout << "ID: " << serie.id << endl;
+        cout << "Género: " << serie.serie_genero << endl;
+        cout << "Episodios: " << endl;
+
+        cout << endl;
+    }
+}
+
 
 void Catalogo::VideosporCalificacion() {
     float iCalificacion = 0.0;
     cout << "Captura la calificación: ";
     cin >> iCalificacion;
+    if (iCalificacion<=0 || iCalificacion>10) {
+        throw std::runtime_error("Error: Ingresa una calificacion valida ");
+    }
     cin.clear();            //LIMPIA EL INDICADOR DE ERROR, SI TECLEA UN VALOR DIFERENTE A NUMERO
     cin.ignore(1000,'\n');  //BORRA UNO O MAS CARACTERES DEL BUFFER, \N ES EL DELIMITADOR O CARACTER FINAL DE ENTRADA
+    
     for(int i=0; i<vSeries.size(); i++)
     {
         vSeries[i].VideosporCalificacion(iCalificacion);
@@ -137,18 +165,36 @@ void Catalogo::VideosporGenero() {
     string sGenero = "";
     cout << "Captura el genero del video: ";
     getline(cin,sGenero);
-    for(int i=0; i<vSeries.size(); i++)
-    {
-        if ( vSeries[i].SerieGenero().find(sGenero) != std::string::npos )  //si hemos llegado al final de nuestra cadena.
-        {
-            vSeries[i].VideosporGenero(sGenero);
-        }
+
+    if (sGenero.empty()) {
+        throw std::runtime_error("Error: Ingresa un genero valido ");
     }
+
+    bool sGeneroEncontrado = false;
+    cout << "⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆ Peliculas de "<< sGenero << " ⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆" << endl << endl;
     for(int i=0; i<vPeliculas.size(); i++)
     {
         if ( vPeliculas[i].PeliculaGenero().find(sGenero) != std::string::npos )  //si hemos llegado al final de nuestra cadena.
         {
             vPeliculas[i].VideosporGenero(sGenero);
+            sGeneroEncontrado = true;
+        }
+    }
+
+    if (!sGeneroEncontrado) {
+        system("clear");
+        throw std::runtime_error("Error: Ingresa un genero valido ");
+    }
+
+    cout << "⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆ Series de "<< sGenero << " ⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆" << endl << endl;
+    
+    for(int i=0; i<vSeries.size(); i++)
+    {
+    
+        if ( vSeries[i].SerieGenero().find(sGenero) != std::string::npos )  //si hemos llegado al final de nuestra cadena.
+        {
+            vSeries[i].VideosporGenero(sGenero);
+            
         }
     }
 }
@@ -158,21 +204,35 @@ void Catalogo::EpisodiosPorSerie()
     string sNombre = "";
     cout << "Captura el nombre de la serie: ";
     getline(cin,sNombre);
+    bool serieEncontrada = false;
+
     for(int i=0; i<vSeries.size(); i++)
     {
         if ( vSeries[i].SerieNombre() == sNombre )
         {
             vSeries[i].EpisodiosPorSerie(sNombre);
+            serieEncontrada = true;
+            
         }
     }
+
+    if (!serieEncontrada)
+    {
+        throw runtime_error("Error: Ingrese una serie del catálogo.");
+    }
+    
 }
 
 void Catalogo::PeliculasporCalificacion() {
     float iCalificacion = 0.0;
     cout << "Captura la calificación: ";
     cin >> iCalificacion;
+    if (iCalificacion<=0 || iCalificacion>10) {
+        throw std::runtime_error("Error: Ingresa una calificacion valida ");
+    }
     cin.clear();            //LIMPIA EL INDICADOR DE ERROR, SI TECLEA UN VALOR DIFERENTE A NUMERO
     cin.ignore(1000,'\n');  //BORRA UNO O MAS CARACTERES DEL BUFFER, \N ES EL DELIMITADOR O CARACTER FINAL DE ENTRADA
+    cout << "⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆ PELICULAS CON CALIFICACION MAYOR A "<<iCalificacion<<" ⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆" << endl << endl;
     for(int i=0; i<vPeliculas.size(); i++)
     {
         vPeliculas[i].PeliculasporCalificacion(iCalificacion);
@@ -203,17 +263,17 @@ void Catalogo::CalificarVideo() {
     {
         try
         {
-            cout << "Captura la calificación para el video " << sNombre << ": " << endl;
+            cout << "Captura la calificacion para el video " << sNombre << ": " << endl;
             cin >> iCalificacion;
             cin.clear();            //LIMPIA EL INDICADOR DE ERROR, SI TECLEA UN VALOR DIFERENTE A NUMERO
             cin.ignore(1000,'\n');  //BORRA UNO O MAS CARACTERES DEL BUFFER, \N ES EL DELIMITADOR O CARACTER FINAL DE ENTRADA
             if (iCalificacion == 0)
             {
                 system("clear");
-                throw std::runtime_error("Error, captura una calificación correcta.");
+                throw std::runtime_error("Error, captura una calificacion correcta.");
             }
             system("clear");
-            cout << "Calificación guardada." << endl;
+            cout << "Calificacion guardada." << endl;
         }
         catch (const exception& p_error)
         {
@@ -224,6 +284,12 @@ void Catalogo::CalificarVideo() {
     else
         cout << "El nombre del video no existe." << endl;
 }
+
+
+
+
+
+
 
 void Catalogo::Ordenar_por_NombreArreglo(datos_video *lista, int numElementos)
 { 

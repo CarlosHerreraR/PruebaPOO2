@@ -37,7 +37,7 @@ void Serie::VideosporGenero(string p_serie_genero)
     {
         for(int i=0; i<oEpisodio.size(); i++)
 	    {
-    		cout << "|Nombre: " + serie_nombre + " |Genero: " + serie_genero + oEpisodio[i].ConsultaEpisodios() << endl;
+    		cout << "Nombre: " + serie_nombre + "\nGenero: " + serie_genero + "\n"+oEpisodio[i].ConsultaEpisodios() << endl;
     	}
     }
     else
@@ -51,7 +51,7 @@ void Serie::VideosporCalificacion(float p_calificacion) {
     {
         string sVideo = oEpisodio[i].VideosporCalificacion(p_calificacion);
         if ( sVideo != "" )
-            cout << "|Nombre: " + serie_nombre + " |Genero: " + serie_genero + sVideo << endl;
+            cout << "Nombre: " + serie_nombre + "\nGenero: " + serie_genero + sVideo << endl;
     }
 }
 
@@ -61,7 +61,7 @@ void Serie::EpisodiosPorSerie(string p_serie_nombre)
     {
         for(int i=0; i<oEpisodio.size(); i++)
 	    {
-    		cout << "|Nombre: " + serie_nombre + " |Genero: " + serie_genero + oEpisodio[i].ConsultaEpisodios() << endl;
+    		cout << "Nombre: " + serie_nombre + "\nGenero: " + serie_genero + "\n"+ oEpisodio[i].ConsultaEpisodios() << endl;
     	}
     }
     else
@@ -69,3 +69,5 @@ void Serie::EpisodiosPorSerie(string p_serie_nombre)
         cout << "No existe información";
     }
 }
+
+

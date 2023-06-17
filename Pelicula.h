@@ -7,10 +7,10 @@ using namespace std;
 #include "Consultas.h"
 
 class Pelicula : public Video , public Consultas {
-    private:
-        string pelicula_genero;
+        
 
     public:
+        string pelicula_genero;
         Pelicula(string p_id, string p_nombre, int p_duracion, float p_calificacion, string p_fecha_estreno, string p_genero);
 
         string PeliculaGenero();

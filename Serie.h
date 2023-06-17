@@ -8,13 +8,12 @@ using namespace std;
 #include "Consultas.h"
 
 class Serie : public Episodio , public Consultas {
-    private:
+    public:
         string serie_id;
         string serie_nombre;
         string serie_genero;
         vector<Episodio> oEpisodio;
 
-    public:
         Serie(vector<Episodio> p_episodio, string p_serie_id, string p_serie_nombre, string p_serie_genero);
 
         string SerieNombre();

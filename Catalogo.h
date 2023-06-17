@@ -33,14 +33,15 @@ class Catalogo
         vector<Serie> vSeries;
 
     public:
+    
         Catalogo();
+        void VerTodo();
         void CargaVideos();
         void CalificarVideo();
         void VideosporGenero();
         void VideosporCalificacion();
         void EpisodiosPorSerie();
         void PeliculasporCalificacion();
-        
         void Ordenar_por_NombreArreglo(datos_video * lista, int numElementos);
 };
 

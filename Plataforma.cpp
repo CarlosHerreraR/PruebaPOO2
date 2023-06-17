@@ -10,7 +10,7 @@ Plataforma::Plataforma()
     {
         string sUsuario = "";
         string sContrasena = "";
-        cout << "--- Bievenido a Netflix ---" << endl;
+        cout << "⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆ BIENVENIDO A NETFLIX ⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆" << endl;
         cout << "Captura tu usuario:" << endl;
         cin >> sUsuario;
         cin.clear();            //LIMPIA EL INDICADOR DE ERROR, SI TECLEA UN VALOR DIFERENTE A NUMERO
@@ -36,19 +36,21 @@ Plataforma::Plataforma()
 void Plataforma::Menu() {
     bool bSalir = false;
     Catalogo oCatalogo;
-        
+    oCatalogo.CargaVideos();  
     while (!bSalir)
     {
         int iOpcion = 0;
-        cout << "--- Netflix ---" << endl;
+        cout << endl << "🡹      🡹       🡹       🡹       🡹       🡹       🡹" << endl;
+        cout << endl << "⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆ MENU ⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆" << endl;
         cout << "Selecciona una opción:" << endl;
-        cout << "1 - Cargar archivo de catalogo" << endl;
+        cout << "1 - Ver todo el catálogo" << endl;
         cout << "2 - Consultar videos por mayor calificación" << endl;
         cout << "3 - Consultar videos por genero" << endl;
         cout << "4 - Consultar episodios de una serie" << endl;
         cout << "5 - Consultar peliculas por mayor calificación" << endl;
         cout << "6 - Calificar un video" << endl;
         cout << "7 - Salir" << endl;
+        cout << "⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆⋆" << endl;
         cin >> iOpcion;
         cin.clear();            //LIMPIA EL INDICADOR DE ERROR, SI TECLEA UN VALOR DIFERENTE A NUMERO
         cin.ignore(1000,'\n');  //BORRA UNO O MAS CARACTERES DEL BUFFER, \N ES EL DELIMITADOR O CARACTER FINAL DE ENTRADA
@@ -66,30 +68,58 @@ void Plataforma::Menu() {
             cout << p_error.what() << "\n";
         }        
 
+
         if ( iOpcion == 1 )
         {
             system("clear");
-            oCatalogo.CargaVideos();
+            oCatalogo.VerTodo();  
         }
         else if ( iOpcion == 2 )
         {
+            
             system("clear");
+            try{
             oCatalogo.VideosporCalificacion();
+            }
+            catch (const std::exception& e) {
+                    std::cerr << "Error: Ingresa una calificacion valida." << std::endl;
+                }
         }
         else if ( iOpcion == 3 )
         {
             system("clear");
-            oCatalogo.VideosporGenero();
+            
+            try {
+                    oCatalogo.VideosporGenero();
+                } 
+            catch (const std::exception& e) {
+                    std::cerr << "Error: Ingresa un genero valido." << std::endl;
+                }
+
+
+            
         }
         else if ( iOpcion == 4 )
         {
-            system("clear");
-            oCatalogo.EpisodiosPorSerie();
+            
+            try{
+                system("clear");
+                oCatalogo.EpisodiosPorSerie();
+            }
+            catch (const exception& e){
+                    cout << e.what() << endl;
+            }
+            
         }
         else if ( iOpcion == 5 )
         {
             system("clear");
-            oCatalogo.PeliculasporCalificacion();
+            try{
+                oCatalogo.PeliculasporCalificacion();
+            }
+            catch (const std::exception& e) {
+                    std::cerr << "Error: Ingresa una calificacion valida." << std::endl;
+                }
         }
         else if ( iOpcion == 6 )
         {

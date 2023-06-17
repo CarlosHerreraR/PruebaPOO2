@@ -17,7 +17,7 @@ string Episodio::VideosporCalificacion(float p_calificacion)
 
 string Episodio::ConsultaEpisodios()
 {
-    return Video::ConsultaVideos() + " |Episodio: " + to_string(episodio_numero) + " |Temporada: " + to_string(episodio_temporada);
+    return "\n \nEpisodio "+ Video::ConsultaVideos() + " Episodio: " + to_string(episodio_numero) + " Temporada: " + to_string(episodio_temporada);
 }
 
 string Episodio::EpisodioNombre() {

@@ -15,7 +15,7 @@ Video::Video(string p_id, string p_nombre, int p_duracion, float p_calificacion,
 
 string Video::ConsultaVideos() 
 {
-    return "|Nombre: " + nombre + " |Duración: " + to_string(duracion) + " |Calificación: " + to_string(calificacion) + " |Estreno: " + fecha_estreno;
+    return "Nombre: " + nombre + " \nDuración: " + to_string(duracion) + " Calificación: " + to_string(calificacion) + " \nEstreno: " + fecha_estreno;
 }
 
 string Video::VideosporCalificacion(float p_calificacion) {
@@ -26,3 +26,12 @@ string Video::VideosporCalificacion(float p_calificacion) {
     else
         return "";
 }
+
+
+ int Video::getTotalCalificaciones() const {
+        return totalCalificaciones;
+    }
+
+void Video::setTotalCalificaciones(int total) {
+        totalCalificaciones = total;
+    }

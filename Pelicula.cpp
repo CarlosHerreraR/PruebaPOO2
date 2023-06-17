@@ -17,7 +17,8 @@ void Pelicula::VideosporGenero(string p_pelicula_genero)
 {
     if ( pelicula_genero.find(p_pelicula_genero) != std::string::npos )  //si hemos llegado al final de nuestra cadena.
     {
-        cout << Video::ConsultaVideos() << " |Genero: " << pelicula_genero << endl;
+        cout << Video::ConsultaVideos() << endl<< "Genero: " << pelicula_genero << endl <<endl;
+        
     }
     else
     {
@@ -28,11 +29,11 @@ void Pelicula::VideosporGenero(string p_pelicula_genero)
 void Pelicula::VideosporCalificacion(float p_calificacion) {
     string sVideo = Video::VideosporCalificacion(p_calificacion);
     if ( sVideo != "" )
-        cout << sVideo << " |Genero: " << pelicula_genero << endl;
+        cout << sVideo << endl << "Genero: " << pelicula_genero << endl<<endl;
 }
 
 void Pelicula::PeliculasporCalificacion(float p_calificacion) {
     string sVideo = Video::VideosporCalificacion(p_calificacion);
     if ( sVideo != "" )
-        cout << sVideo << " |Genero: " << pelicula_genero << endl;
+        cout << sVideo << endl << "Genero: " << pelicula_genero << endl<<endl;
 }
